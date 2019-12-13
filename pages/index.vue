@@ -137,6 +137,9 @@
                  @closeDialog="editModels = false"
                  @saveModel="editModel"
     ></edit-models>
+    <v-btn @click="generator">
+      gen
+    </v-btn>
     <v-btn
       fab
       color="primary"
@@ -156,6 +159,7 @@
     import AddModels from '../components/AddModels'
     import EditModule from "../components/EditModule";
     import EditModels from "../components/EditModels";
+    import {saveAs} from 'file-saver';
 
     export default {
         components: {
@@ -208,7 +212,6 @@
                 data.id = this.id
                 this.items.push(data)
                 this.newDialog = false
-                console.log(this.items)
             },
             saveModel(model) {
                 this.id += 1
@@ -243,18 +246,15 @@
                     }
                 })
                 this.editModels = false
+            },
+            generator() {
+                const fs = (process.server ? require('fs-extra') : null)
+                let data = JSON.stringify(this.items, null, 2)
+                console.log(data)
+                var blob = new Blob([data], {type: "text/json;charset=utf-8"});
+                saveAs(blob, "algo.json")
             }
         },
-        watch: {
-            items: function (value) {
-                console.log(value)
-            },
-            active: function (value) {
-                console.log(value)
-            },
-            selected: function (value) {
-                console.log(value)
-            }
-        }
+        watch: {}
     }
 </script>

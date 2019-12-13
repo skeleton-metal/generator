@@ -145,7 +145,6 @@
                 }
             },
             deleteField(item) {
-                console.log(item)
                 this.form.fields.splice(this.form.fields.indexOf(item), 1);
 
             },
