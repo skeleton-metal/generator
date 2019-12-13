@@ -20,7 +20,7 @@
                 type="text"
                 v-model="form.name"
                 placeholder="Name"
-
+                :rules="[v => !!v || 'Name is required']"
                 required
               />
             </v-col>
@@ -39,7 +39,7 @@
         <v-btn
           color="primary"
           text
-          @click="$emit('editForm', form)"
+          @click="saveForm"
         >
           I accept
         </v-btn>
@@ -63,6 +63,13 @@
                     name: ""
                 },
                 valid: false
+            }
+        },
+        methods: {
+            saveForm() {
+                if (this.$refs.form.validate()) {
+                    this.$emit('editForm', this.form)
+                }
             }
         },
         mounted() {

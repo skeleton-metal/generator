@@ -6,7 +6,7 @@
   >
     <v-card>
       <v-card-title class="pl-4">
-        <span class="title">Add Model</span>
+        <span class="title">Edit Model</span>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" @submit.prevent="" autocomplete="off" v-model="valid">
@@ -112,10 +112,13 @@
 </template>
 
 <script>
+    import cloneByJsonCopy from '../helpers/cloneByJsonCopy'
+
     export default {
-        name: "AddModels",
+        name: "EditModels",
         props: {
             dialog: Boolean,
+            model: Object
         },
         data: () => {
             return {
@@ -151,6 +154,9 @@
                     this.$emit('saveModel', this.form)
                 }
             }
+        },
+        mounted() {
+            this.form = cloneByJsonCopy(this.model);
         }
     }
 </script>

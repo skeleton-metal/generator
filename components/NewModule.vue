@@ -10,6 +10,7 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form" @submit.prevent="" @keyup.enter.native="$emit('saveForm', form)" autocomplete="off"
+                lazy-validation
                 v-model="valid">
           <v-row>
             <v-col cols="12" md="12" sm="6">
@@ -20,8 +21,8 @@
                 type="text"
                 v-model="form.name"
                 placeholder="Name"
-
                 required
+                :rules="[v => !!v || 'Name is required']"
               />
             </v-col>
           </v-row>
@@ -39,7 +40,7 @@
         <v-btn
           color="primary"
           text
-          @click="$emit('saveForm', form)"
+          @click="saveForm"
         >
           I accept
         </v-btn>
@@ -59,7 +60,14 @@
                 form: {
                     name: ""
                 },
-                valid: false
+                valid: false,
+            }
+        },
+        methods: {
+            saveForm() {
+                if (this.$refs.form.validate()) {
+                    this.$emit('saveForm', this.form)
+                }
             }
         }
     }

@@ -8,7 +8,7 @@
         class="pa-4"
         justify="space-between"
       >
-        <v-col cols="5">
+        <v-col cols="6">
           <v-treeview
             :active.sync="active"
             :items="items"
@@ -53,22 +53,40 @@
                 tag="v-card-text"
               >
                 <div v-if="selected.fields">
-                  {{selected}}
+                  <v-btn color="primary"
+                         small
+                         @click="editModels = true"
+                  >Edit
+                  </v-btn>
+                  <v-list
+                    two-line
+                    dense
+                    rounded>
+                    <v-subheader>Fields:</v-subheader>
+                    <v-list-item
+                      v-for="(item, i) in selected.fields"
+                      :key="i"
+                    >
+                      <v-list-item-content>
+                        <v-list-item-title v-text="item.name"></v-list-item-title>
+                        <v-list-item-subtitle v-text="item.type"></v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
                 </div>
                 <div v-else-if="selected.children">
-                  {{selected}}
                   <v-row wrap>
                     <v-col cols="12" class="text-center">
                       <v-btn color="primary"
                              small
                              @click="newModelDialog = true">Add Model
                       </v-btn>
+                      <v-divider></v-divider>
                       <v-btn color="primary"
                              small
                              @click="editDialog = true"
                       >Edit
                       </v-btn>
-
                     </v-col>
                   </v-row>
                 </div>
@@ -113,6 +131,12 @@
                  :item="selected"
                  @closeDialog="editDialog = false"
                  @editForm="editModule"></edit-module>
+    <edit-models v-if="editModels"
+                 :dialog="editModels"
+                 :model="selected"
+                 @closeDialog="editModels = false"
+                 @saveModel="editModel"
+    ></edit-models>
     <v-btn
       fab
       color="primary"
@@ -131,12 +155,14 @@
     import NewModule from '../components/NewModule'
     import AddModels from '../components/AddModels'
     import EditModule from "../components/EditModule";
+    import EditModels from "../components/EditModels";
 
     export default {
         components: {
             NewModule,
             AddModels,
-            EditModule
+            EditModule,
+            EditModels
         },
         data: () => {
             return {
@@ -146,7 +172,8 @@
                 open: [],
                 active: [],
                 newModelDialog: false,
-                editDialog: false
+                editDialog: false,
+                editModels: false
 
             }
         },
@@ -202,6 +229,20 @@
                 x.name = item.name
                 this.editDialog = false
 
+            },
+            editModel(item) {
+                const id = this.active[0]
+                this.items.map(x => {
+                    if (x.children) {
+                        x.children.map(a => {
+                            if (a.id === id) {
+                                this.$set(a, 'name', item.name)
+                                this.$set(a, 'fields', item.fields)
+                            }
+                        })
+                    }
+                })
+                this.editModels = false
             }
         },
         watch: {
