@@ -23,7 +23,7 @@
     "fs": "0.0.1-security",
     "fs-extra": "^8.1.0",
     "material-design-icons-iconfont": "^5.0.1",
-    "nuxt": "^2.0.0",
+    "nuxt": "^3.4.3",
     "vuetify": "^2.1.13"
   },
   "devDependencies": {
